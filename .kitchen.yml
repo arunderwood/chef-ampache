@@ -1,26 +1,23 @@
 ---
 driver:
-  name: vagrant
+  name: ec2
+  security_group_ids: ["sg-865fb1e2"]
+  region: us-east-1
+  subnet_id: subnet-a4638e98
+  instance_type: m3.medium
+  spot_price: 0.01
+
+transport:
+ ssh_key: ~/.ssh/<%= ENV['USER'] %>
 
 provisioner:
-  name: chef_zero
-  # You may wish to disable always updating cookbooks in CI or other testing environments.
-  # For example:
-  #   always_update_cookbooks: <%= !ENV['CI'] %>
-  always_update_cookbooks: true
-
-verifier:
-  name: inspec
+  name: chef_solo
 
 platforms:
-  - name: ubuntu-16.04
-  - name: centos-7.2
+  - name: ubuntu-14.04
 
 suites:
   - name: default
     run_list:
       - recipe[chef-ampache::default]
-    verifier:
-      inspec_tests:
-        - test/recipes
     attributes:
